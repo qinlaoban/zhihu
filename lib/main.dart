@@ -59,53 +59,86 @@ class _MyHomePageState extends State<MyHomePage> {
         title: Text(widget.title),
       ),
       body: ListView.builder(itemBuilder: (context,index){
-        return item();
+        return item(_data?[index],index);
       },itemCount:  _data == null ? 1:10,),
      // This trailing comma makes auto-formatting nicer for build methods.
     );
   }
   // https://api.zhihu.com/topstory/hot-list
-  Widget item() {
+  Widget item(Map item,int idx) {
     return Container(
       // color: Colors.amber,
       padding: EdgeInsets.only(left: 16,right: 16,top: 16),
       child: Column(
         children: [
-          Row(
+           Row(
             children: [
               Container(
-                color: Colors.orange,
-                padding: EdgeInsets.only(left: 5,right: 5),
-                child: Text(
-                  "01",
-                  style: TextStyle(
-                    color: Colors.red
-                  ),
+                width: 30,
+                decoration: const BoxDecoration(
+                  gradient:LinearGradient(
+                    // begin: Alignment.topLeft, //右上
+                    // end: Alignment.bottomRight, //左下
+                    stops: [0.0, 1.0],
+                    colors: [Colors.orange,Colors.white],
+                  )
+                ),
+                // color: Colors.orange,
+                child: Center(
+                  child: Text(
+                    "${idx+9}",
+                    style:const TextStyle(
+                      color: Colors.red,
+                      fontSize: 13,
+                    ),
 
+                  ),
                 ),
               ),
-              SizedBox(width: 5,),
-              Text("2172w热舞")
+              const SizedBox(width: 5,),
+              // 标题
+              Expanded(child: Text(item["target"]["title"] ?? "",
+                overflow:TextOverflow.ellipsis,
+                maxLines: 1,style: const TextStyle(
+                color: Colors.black87,
+                fontWeight: FontWeight.w600,
+
+              ),),
+
+              ),
             ],
           ),
-          SizedBox(height: 8,),
+         const SizedBox(height: 8,),
           Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Expanded(
                 child: Container(
-                  color: Colors.blue,
-                  child: Text("中国国家男子足男子足嫌严重违男子足嫌严重违男子足嫌严重违法，正接受,家男子足嫌严嫌严重违法，正接受,家男子足嫌严重违法家男子足嫌严重违法",
+                  // color: Colors.blue,
+                  child: Text(item["target"]["title"] ?? "",
                     maxLines: 3,
+
+                    style: TextStyle(
+                      height: 1.5,
+                    ),
 
                   ),
                 ),
               ),
-              SizedBox(width: 10,),
+              const  SizedBox(width: 10,),
+              // 右侧图片
               Container(
-                color: Colors.orange,
+                decoration: BoxDecoration(
+                  borderRadius: const BorderRadius.all(Radius.circular(8)),
+                  image: DecorationImage(
+                    fit: BoxFit.cover,
+                    image: NetworkImage(item["children"][0]["thumbnail"])
+                  )
+                ),
+                // color: Colors.orange,
                 height: 60,
-                width: 100,
+                width: 90,
               ),
             ],
           )
